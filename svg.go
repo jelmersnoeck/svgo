@@ -248,6 +248,23 @@ func (svg *SVG) Pattern(id string, x, y, width, height int, putype string, s ...
 // PatternEnd ends a marker
 func (svg *SVG) PatternEnd() { svg.println(`</pattern>`) }
 
+// AddFont adds a font face to the svg document.
+func (svg *SVG) AddFont(family, style, path, format string, weight int) {
+	css := `
+	<style type="text/css">
+		@font-face {
+			font-family: '%s';
+			font-style: %s;
+			font-weight: %d;
+			src: local('%s'), url('%s') format('%s');
+		}
+	</style>
+	`
+	svg.Def()
+	svg.printf(css, family, style, weight, family, path, format)
+	svg.DefEnd()
+}
+
 // Desc specified the text of the description tag.
 // Standard Reference: http://www.w3.org/TR/SVG11/struct.html#DescElement
 func (svg *SVG) Desc(s string) { svg.tt("desc", s) }
